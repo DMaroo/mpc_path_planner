@@ -1,0 +1,12 @@
+<?xml version="1.1" encoding="UTF-8"?>
+
+<launch>
+	<node name="runner" pkg="turtlesim" type="turtlesim_node"/>
+	<node name="ros_service_kill" pkg="rosservice" type="rosservice" args="call /kill &quot;name: 'turtle1'&quot;"/>
+
+	<node name="ros_service_spawn2" pkg="rosservice" type="rosservice" args="call /spawn 0.5 0.5 0.0 &quot;runner&quot;"/>
+	<node name="ros_service_spawn1" pkg="rosservice" type="rosservice" args="call /spawn 5.5 5.5 0.0 &quot;chaser&quot;"/>
+
+	<remap from="/turtle1/cmd_vel" to="/chaser/cmd_vel"/>
+	<node name="teleop_chaser" pkg="turtlesim" type="turtle_teleop_key" output="screen"/>
+</launch>
