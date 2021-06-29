@@ -6,6 +6,8 @@
 #include "turtle_class.hpp"
 #include "ipopt_planner.hpp"
 
+double curr_acc = 1;
+
 int main(int argc, char* argv[])
 {
 	ros::init(argc, argv, "planner");
@@ -77,12 +79,12 @@ int main(int argc, char* argv[])
 				if (theta_difference(curr_theta, runner.m_pose.theta) > 0.7)
 				{
 					initialise_twist(pub_vel);
-					pub_vel.angular.z = -1;
+					pub_vel.angular.z = -0.3;
 				}
 				else if (theta_difference(curr_theta, runner.m_pose.theta) < -0.7)
 				{
 					initialise_twist(pub_vel);
-					pub_vel.angular.z = 1;
+					pub_vel.angular.z = 0.3;
 				}
 				else
 				{
