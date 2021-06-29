@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
 
 	std::cout << termcolor::bold << termcolor::green << "[+]" << termcolor::reset << " Planner nodes ready!" << std::endl;
 
-	ros::Rate loop_rate = 50;
+	ros::Rate loop_rate = 100;
 
 	geometry_msgs::Twist pub_vel;
 	turtlesim::Pose goal;
@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 	{
 		std::cout << std::endl << termcolor::color<100, 100, 100> << termcolor::bold << "[?]" << termcolor::reset << " To exit the program, enter \"" << termcolor::red << "exit" << termcolor::reset << "\" as any one of the inputs" << std::endl;
 
-		std::cout << std::endl << termcolor::bold << termcolor::blue << "[=]" << termcolor::reset << "Please enter the goal position for the turtle (currently at (" << runner.m_pose.x << ", " << runner.m_pose.y << ")) (format: <x y>) : ";
+		std::cout << std::endl << termcolor::bold << termcolor::blue << "[=]" << termcolor::reset << " Please enter the goal position for the turtle (currently at (" << runner.m_pose.x << ", " << runner.m_pose.y << ")) (format: <x y>) : ";
 
 		std::cin >> state;
 
@@ -79,12 +79,12 @@ int main(int argc, char* argv[])
 				if (theta_difference(runner.m_pose.theta, curr_theta) > 0.7)
 				{
 					initialise_twist(pub_vel);
-					pub_vel.angular.z = -0.3;
+					pub_vel.angular.z = -1;
 				}
 				else if (theta_difference(runner.m_pose.theta, curr_theta) < -0.7)
 				{
 					initialise_twist(pub_vel);
-					pub_vel.angular.z = 0.3;
+					pub_vel.angular.z = 1;
 				}
 				else
 				{

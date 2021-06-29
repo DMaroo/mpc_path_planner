@@ -1,9 +1,13 @@
 #include "ipopt_planner.hpp"
+#include <ros/ros.h>
+#include <sstream>
 #include <cmath>
 
 #define DEL_T 0.5
-#define A_THRESH 1.5
-#define T_THRESH 0.1
+#define A_THRESH 0.4
+#define T_THRESH 1.0
+#define V_THRESH 2.0
+#define W_THRESH 2.0
 
 double XG = 0, YG = 0;
 extern double curr_acc;
@@ -14,7 +18,7 @@ std::tuple<CppAD::AD<double>, CppAD::AD<double>> get_coordinates(CppAD::AD<doubl
 	CppAD::AD<double> r_x {x}, r_y {y};
 
 	r_x = x + v*DEL_T*CppAD::cos(t) + 0.5*a*DEL_T*DEL_T*CppAD::cos(t);
-	r_y = x + v*DEL_T*CppAD::sin(t) + 0.5*a*DEL_T*DEL_T*CppAD::sin(t);
+	r_y = y + v*DEL_T*CppAD::sin(t) + 0.5*a*DEL_T*DEL_T*CppAD::sin(t);
 	
 	return std::make_tuple(r_x, r_y);
 }
@@ -173,13 +177,17 @@ geometry_msgs::Twist get_velocity(turtlesim::Pose _runner, turtlesim::Pose _chas
 	solved.linear.y = 0;
 	solved.linear.z = 0;
 
-	solved.angular.z = theta_difference(to_theta(solution.x[1]), _runner.theta)/DEL_T;
+	solved.angular.z = std::min(theta_difference(to_theta(solution.x[1]), _runner.theta)/DEL_T, W_THRESH);
 	double a = solution.x[0];
 	curr_acc = a;
 
-	solved.linear.x = _runner.linear_velocity + a*DEL_T;
+	solved.linear.x = std::min(_runner.linear_velocity + a*DEL_T, V_THRESH);
 
-	std::cout << "Linear: " << solved.linear.x << " | Angular : " << solved.angular.z << " | Predicted Theta: " << solution.x[1] << "| Acceleration: " << a << std::endl;
+	std::stringstream dbg_params;
+
+	dbg_params << "Linear: " << solved.linear.x << " | Angular : " << solved.angular.z << " | Theta: " << solution.x[1] << "| Acceleration: " << a << std::endl;
+
+	ROS_DEBUG(dbg_params.str().c_str());
 
 	return solved;
 }
@@ -197,5 +205,5 @@ void initialise_twist(geometry_msgs::Twist& _twist)
 
 bool close_to(const turtlesim::Pose& _pose1, const turtlesim::Pose& _pose2)
 {
-	return (abs(_pose1.x - _pose2.x) <= 0.2 && abs(_pose1.y - _pose2.y) <= 0.2);
+	return (abs(_pose1.x - _pose2.x) <= 0.4 && abs(_pose1.y - _pose2.y) <= 0.4);
 }
