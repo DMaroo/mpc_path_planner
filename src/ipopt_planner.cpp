@@ -1,8 +1,8 @@
 #include "ipopt_planner.hpp"
 #include <cmath>
 
-#define DEL_T 1
-#define A_THRESH 2
+#define DEL_T 0.5
+#define A_THRESH 1.5
 #define T_THRESH 0.1
 
 double XG = 0, YG = 0;
@@ -80,20 +80,25 @@ namespace
 	};
 }
 
-double theta_difference(double _reference, double _goal)
+double to_theta(double _theta)
+{
+	if (_theta < -M_PI)
+	{
+		_theta += 2*M_PI; 
+	}
+	else if (_theta > M_PI)
+	{
+		_theta -= 2*M_PI;
+	}
+
+	return _theta;
+}
+
+double theta_difference(double _goal, double _reference)
 {
 	_goal -= _reference;
 
-	if (_goal < -M_PI)
-	{
-		_goal += 2*M_PI; 
-	}
-	else if (_goal > M_PI)
-	{
-		_goal -= 2*M_PI;
-	}
-
-	return _goal;
+	return to_theta(_goal);
 }
 
 geometry_msgs::Twist get_velocity(turtlesim::Pose _runner, turtlesim::Pose _chaser, turtlesim::Pose _goal)
@@ -114,7 +119,7 @@ geometry_msgs::Twist get_velocity(turtlesim::Pose _runner, turtlesim::Pose _chas
 	for (int i = 0; i < 10; i++)
 	{
 		xi[2*i] = curr_acc;
-		xi[2*i + 1] = _runner.angular_velocity;
+		xi[2*i + 1] = _runner.theta;
 	}
 
 	Dvector xl(nx), xu(nx);
@@ -128,8 +133,8 @@ geometry_msgs::Twist get_velocity(turtlesim::Pose _runner, turtlesim::Pose _chas
 		}
 		else
 		{
-			xl[i] = -T_THRESH;
-			xu[i] = T_THRESH;
+			xl[i] = _runner.theta - T_THRESH;
+			xu[i] = _runner.theta + T_THRESH;
 		}
 	}
 
@@ -168,11 +173,13 @@ geometry_msgs::Twist get_velocity(turtlesim::Pose _runner, turtlesim::Pose _chas
 	solved.linear.y = 0;
 	solved.linear.z = 0;
 
-	solved.angular.z = (theta_difference(solution.x[1], _runner.theta))/DEL_T;
+	solved.angular.z = theta_difference(to_theta(solution.x[1]), _runner.theta)/DEL_T;
 	double a = solution.x[0];
 	curr_acc = a;
 
 	solved.linear.x = _runner.linear_velocity + a*DEL_T;
+
+	std::cout << "Linear: " << solved.linear.x << " | Angular : " << solved.angular.z << " | Predicted Theta: " << solution.x[1] << "| Acceleration: " << a << std::endl;
 
 	return solved;
 }

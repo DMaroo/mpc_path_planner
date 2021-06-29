@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
 
 	std::cout << termcolor::bold << termcolor::green << "[+]" << termcolor::reset << " Planner nodes ready!" << std::endl;
 
-	ros::Rate loop_rate = 100;
+	ros::Rate loop_rate = 50;
 
 	geometry_msgs::Twist pub_vel;
 	turtlesim::Pose goal;
@@ -76,12 +76,12 @@ int main(int argc, char* argv[])
 			{
 				double curr_theta = atan2(goal.y - runner.m_pose.y, goal.x - runner.m_pose.x);
 
-				if (theta_difference(curr_theta, runner.m_pose.theta) > 0.7)
+				if (theta_difference(runner.m_pose.theta, curr_theta) > 0.7)
 				{
 					initialise_twist(pub_vel);
 					pub_vel.angular.z = -0.3;
 				}
-				else if (theta_difference(curr_theta, runner.m_pose.theta) < -0.7)
+				else if (theta_difference(runner.m_pose.theta, curr_theta) < -0.7)
 				{
 					initialise_twist(pub_vel);
 					pub_vel.angular.z = 0.3;
