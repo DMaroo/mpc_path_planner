@@ -6,6 +6,8 @@ This is a basic implementation of a model predictive control path planner in C++
 
 It uses ROS to communicate the position and velocity data from and to a turtlesim node.
 
+This branch is the commented version of the `bicycle` branch.
+
 ## Instructions
 
 ### Build
