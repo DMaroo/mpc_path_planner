@@ -7,7 +7,7 @@ Turtle::Turtle(const turtlesim::Pose& _pose):
 m_pose {_pose}
 {}
 
-Turtle Turtle::operator+(turtlesim::Pose _pose)
+Turtle Turtle::operator+(turtlesim::Pose _pose) // adds to poses elementwise (unused)
 {
 	turtlesim::Pose res;
 
@@ -20,7 +20,7 @@ Turtle Turtle::operator+(turtlesim::Pose _pose)
 	return res;
 }
 
-Turtle Turtle::operator-(turtlesim::Pose _pose)
+Turtle Turtle::operator-(turtlesim::Pose _pose) // subtracts to poses elementwise (unused)
 {
 	turtlesim::Pose res;
 
@@ -33,7 +33,7 @@ Turtle Turtle::operator-(turtlesim::Pose _pose)
 	return res;
 }
 
-Turtle Turtle::operator+=(turtlesim::Pose _pose)
+Turtle Turtle::operator+=(turtlesim::Pose _pose) // (unused)
 {
 	m_pose.x += _pose.x;
 	m_pose.y += _pose.y;
@@ -44,7 +44,7 @@ Turtle Turtle::operator+=(turtlesim::Pose _pose)
 	return *this;
 }
 
-Turtle Turtle::operator-=(turtlesim::Pose _pose)
+Turtle Turtle::operator-=(turtlesim::Pose _pose) // (unused)
 {
 	m_pose.x -= _pose.x;
 	m_pose.y -= _pose.y;
@@ -55,7 +55,7 @@ Turtle Turtle::operator-=(turtlesim::Pose _pose)
 	return *this;
 }
 
-void Turtle::callback(const turtlesim::Pose::ConstPtr& _ptr)
+void Turtle::callback(const turtlesim::Pose::ConstPtr& _ptr) // subscriber callback for the Turtle class
 {
 	m_pose.x = _ptr->x;
 	m_pose.y = _ptr->y;
