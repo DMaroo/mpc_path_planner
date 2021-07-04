@@ -16,4 +16,12 @@ Use `catkin_make` to build the node.
 
 ### Run
 
-To run the program, first run the `main.launch` file, and then in a separate terminal run the `path_planner` node. You can control the obstacle turtle using *teleop_key* from the first terminal. The second terminal will be the user interface for publishing the destinations.
+To run the program, first run the `main.launch` file, and then in a separate terminal run the `path_planner` node as follows:
+
+```
+rosrun path_planner path_planner _goalX:=<x-coordinate-of-goal> _goalY:=<y-coordinate-of-goal>
+```
+
+where replace the expression between the angled brackets by numerical values of the goal's location.
+
+You can control the obstacle turtle using *teleop_key* from the first terminal. The second terminal will be the user interface for publishing the destinations.
