@@ -1,0 +1,5 @@
+del_t: 0.5
+a_thresh: 0.4
+t_thresh: 1.0
+v_thresh: 2.0
+w_thresh: 2.0

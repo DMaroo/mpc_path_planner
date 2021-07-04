@@ -16,4 +16,4 @@ Use `catkin_make` to build the node.
 
 ### Run
 
-To run the program, first run the `main.launch` file, and then in a separate terminal run the `path_planner` node. You can control the obstacle turtle using *teleop_key* from the first terminal. The second terminal will be the user interface for publishing the destinations.
+To run the program, first run the `main.launch` file, and then, after a few seconds (5-6 seconds should be enough for the parameters to be read), in a separate terminal run the `path_planner` node. You can control the obstacle turtle using *teleop_key* from the first terminal. The second terminal will be the user interface for publishing the destinations.

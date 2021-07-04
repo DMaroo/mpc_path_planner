@@ -3,15 +3,12 @@
 #include <sstream>
 #include <cmath>
 
-#define DEL_T 0.5
-#define A_THRESH 0.4
-#define T_THRESH 1.0
-#define V_THRESH 2.0
-#define W_THRESH 2.0
+extern double DEL_T, A_THRESH, T_THRESH, V_THRESH, W_THRESH, curr_acc;
 
 double XG = 0, YG = 0;
-extern double curr_acc;
+
 turtlesim::Pose g_runner, g_chaser;
+
 
 std::tuple<CppAD::AD<double>, CppAD::AD<double>> get_coordinates(CppAD::AD<double> x, CppAD::AD<double> y, CppAD::AD<double> v, CppAD::AD<double> a, CppAD::AD<double> t)
 {

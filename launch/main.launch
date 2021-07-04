@@ -9,4 +9,6 @@
 
 	<remap from="/turtle1/cmd_vel" to="/chaser/cmd_vel"/>
 	<node name="teleop_chaser" pkg="turtlesim" type="turtle_teleop_key" output="screen"/>
+
+	<rosparam command="load" file="$(find path_planner)/param/mpc_params.yaml" ns="mpc_node"/>
 </launch>

@@ -6,13 +6,13 @@
 #include "turtle_class.hpp"
 #include "ipopt_planner.hpp"
 
-double curr_acc = 1;
+double curr_acc = 1, DEL_T, A_THRESH, T_THRESH, V_THRESH, W_THRESH;
 
 int main(int argc, char* argv[])
 {
 	ros::init(argc, argv, "planner");
 
-	ros::NodeHandle planner_node;
+	ros::NodeHandle planner_node("mpc_node");
 
 	Turtle runner, chaser;
 
@@ -24,6 +24,14 @@ int main(int argc, char* argv[])
 	ros::Publisher runner_pub = planner_node.advertise<geometry_msgs::Twist>("/runner/cmd_vel", 100);
 
 	std::cout << termcolor::bold << termcolor::green << "[+]" << termcolor::reset << " Planner nodes ready!" << std::endl;
+
+	std::cout << termcolor::bold << termcolor::yellow << "[*]" << termcolor::reset << " Initialising values from parameter files..." << std::endl;
+
+	planner_node.getParam("del_t", DEL_T);
+	planner_node.getParam("a_thresh", A_THRESH);
+	planner_node.getParam("t_thresh", T_THRESH);
+	planner_node.getParam("v_thresh", V_THRESH);
+	planner_node.getParam("w_thresh", W_THRESH);
 
 	ros::Rate loop_rate = 100;
 
